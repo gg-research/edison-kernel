@@ -128,7 +128,8 @@ bool regmap_volatile(struct regmap *map, unsigned int reg)
 
 bool regmap_precious(struct regmap *map, unsigned int reg)
 {
-	if (!regmap_readable(map, reg))
+//mf	if (!regmap_readable(map, reg))
+	if (!map->format.format_write && !regmap_readable(map, reg))		
 		return false;
 
 	if (map->precious_reg)
