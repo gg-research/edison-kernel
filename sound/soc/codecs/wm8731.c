@@ -311,6 +311,7 @@ static int wm8731_hw_params(struct snd_pcm_substream *substream,
 	struct wm8731_priv *wm8731 = snd_soc_codec_get_drvdata(codec);
 
 //	u16 iface = snd_soc_read(codec, WM8731_IFACE) & 0xfff3;
+	unsigned int format = 0;
 	int i = get_coeff(wm8731->sysclk, params_rate(params));
 	u16 srate = (coeff_div[i].sr << 2) |
 		(coeff_div[i].bosr << 1) | coeff_div[i].usb;
@@ -368,7 +369,7 @@ static int wm8731_set_dai_sysclk(struct snd_soc_dai *codec_dai,
 		wm8731->sysclk_type = clk_id;
 		break;
 	default:
-		return -EINVAL;
+		return -EINVAL;cd ..
 	}
 
 	switch (freq) {
@@ -542,7 +543,7 @@ static int wm8731_probe(struct snd_soc_codec *codec)
 {
 	struct wm8731_priv *wm8731 = snd_soc_codec_get_drvdata(codec);
 //	int ret = 0, i;
-	int ret =;
+	int ret = 0;
 
 	codec->control_data = wm8731->regmap;
 //	ret = snd_soc_codec_set_cache_io(codec, 7, 9, SND_SOC_REGMAP);
@@ -582,6 +583,7 @@ static int wm8731_request_supplies(struct device *dev,
 
 //	ret = wm8731_reset(codec);
 	return  0;
+}	
 
 static int wm8731_hw_init(struct device *dev, struct wm8731_priv *wm8731)
 {
@@ -607,7 +609,8 @@ static int wm8731_hw_init(struct device *dev, struct wm8731_priv *wm8731)
 	regmap_write(wm8731->regmap, WM8731_PWR, 0x7f);
  
 	/* Disable bypass path by default */
-	snd_soc_update_bits(codec, WM8731_APANA, 0x8, 0);
+//mf	snd_soc_update_bits(codec, WM8731_APANA, 0x8, 0);
+	regmap_update_bits(wm8731->regmap, WM8731_APANA, 0x8, 0);	
 
 	/* Regulators will have been enabled by bias management */
 //	regulator_bulk_disable(ARRAY_SIZE(wm8731->supplies), wm8731->supplies);
